@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hardcoded-api-key-detector.onrender.com/sitemap.xml

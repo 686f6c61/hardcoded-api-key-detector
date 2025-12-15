@@ -1,0 +1,13 @@
+# Exclude example files from GitHub secret scanning
+examples/** linguist-generated=true
+landing/public/examples/** linguist-generated=true
+
+# These are intentionally fake credentials for testing purposes
+examples/*.js linguist-generated=true
+examples/*.json linguist-generated=true
+examples/*.yaml linguist-generated=true
+examples/*.tf linguist-generated=true
+examples/.env.example linguist-generated=true
+examples/example-report.txt linguist-generated=true
+landing/public/examples/example-report.txt linguist-generated=true
+landing/public/examples/example-report.html linguist-generated=true

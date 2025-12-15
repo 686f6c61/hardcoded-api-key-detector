@@ -1,0 +1,82 @@
+# Landing page (entire folder and all related files)
+landing/
+public/
+dist/
+index.html
+vite.config.js
+tailwind.config.js
+postcss.config.js
+eslint.config.js
+render.yaml
+
+# Tests
+tests/
+coverage/
+*.test.js
+*.spec.js
+jest.config.json
+
+# Development
+.github/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# CI/CD
+.travis.yml
+.circleci/
+.gitlab-ci.yml
+
+# Documentation
+CONTRIBUTING.md
+SECURITY.md
+.eslintrc.json
+.prettierrc
+
+# Examples (optional - remove this line if you want to include examples)
+examples/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+*.tgz
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Reports
+security-report.*
+
+# Backups
+*.backup
+*.bak
+
+# Configuration files for testing
+.hardcoded-detector.json
+custom-patterns-test.json
+.hardcoded-detector-test.json
