@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "exclude": [
+    "test/**",
+    "tests/**",
+    "spec/**",
+    "mocks/**",
+    "*.test.js",
+    "*.spec.js"
+  ],
+  "severity": "medium",
+  "output": {
+    "format": "console",
+    "file": null
+  },
+  "hooks": {
+    "preCommit": true,
+    "prePush": false
+  },
+  "patterns": {
+    "custom": [],
+    "disabled": []
+  }
+}

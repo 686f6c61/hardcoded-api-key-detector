@@ -1,0 +1,72 @@
+{
+  "name": "hardcoded-api-key-detector",
+  "version": "1.0.0",
+  "description": "Comprehensive security tool to detect hardcoded API keys, tokens, and sensitive credentials in your codebase with 245+ detection patterns, entropy analysis, and baseline filtering",
+  "main": "src/index.js",
+  "bin": {
+    "hardcoded-detector": "./src/cli/index.js",
+    "had": "./src/cli/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:unit": "jest --testPathPattern=tests/",
+    "lint": "eslint src/ tests/",
+    "lint:fix": "eslint src/ tests/ --fix",
+    "format": "prettier --write \"src/**/*.js\" \"tests/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"tests/**/*.js\"",
+    "scan": "node src/cli/index.js scan",
+    "init": "node src/cli/index.js init",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "security",
+    "api-keys",
+    "api-key-detection",
+    "secret-scanning",
+    "credential-detection",
+    "hardcoded-secrets",
+    "security-scanner",
+    "git-hooks",
+    "ci-cd",
+    "pre-commit",
+    "entropy-detection",
+    "baseline",
+    "github-actions",
+    "secrets-management",
+    "vulnerability-scanner",
+    "code-security",
+    "devsecops"
+  ],
+  "author": "686f6c61",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/686f6c61/hardcoded-api-key-detector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/686f6c61/hardcoded-api-key-detector/issues"
+  },
+  "homepage": "https://hardcoded-api-key-detector.onrender.com",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "src/",
+    "LICENSE",
+    "README.md"
+  ],
+  "dependencies": {
+    "commander": "^12.1.0",
+    "chalk": "^4.1.2",
+    "glob": "^11.0.0",
+    "fs-extra": "^11.2.0",
+    "jsonschema": "^1.4.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2"
+  }
+}

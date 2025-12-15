@@ -1,0 +1,2979 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "lastUpdated": "2025-12-14",
+    "description": "Community-maintained patterns for detecting hardcoded API keys and credentials",
+    "repository": "https://github.com/686f6c61/hardcoded-api-detector",
+    "contributionGuide": "https://github.com/686f6c61/hardcoded-api-detector/blob/main/CONTRIBUTING.md",
+    "totalPatterns": 245
+  },
+  "categories": {
+    "ai": "AI/ML Platforms",
+    "cloud": "Cloud Service Providers",
+    "database": "Database Services",
+    "payment": "Payment Processing",
+    "communication": "Communication Services",
+    "authentication": "Authentication Tokens",
+    "storage": "Cloud Storage",
+    "social": "Social Media Platforms",
+    "development": "Development Tools",
+    "monitoring": "Monitoring & Analytics",
+    "infrastructure": "Infrastructure as Code",
+    "package": "Package Managers",
+    "container": "Container Services",
+    "security": "Security Certificates",
+    "cryptocurrency": "Cryptocurrency Wallets",
+    "email": "Email Services",
+    "sms": "SMS Services",
+    "video": "Video & Media Services",
+    "search": "Search Services",
+    "maps": "Maps & Location Services",
+    "crm": "CRM Platforms",
+    "marketing": "Marketing Automation",
+    "cdn": "Content Delivery Networks",
+    "ecommerce": "E-commerce Platforms",
+    "cms": "Content Management Systems",
+    "generic": "Generic Patterns"
+  },
+  "patterns": {
+    "aws_access_key": {
+      "name": "AWS Access Key ID (IAM, SES, S3, EC2, etc.)",
+      "pattern": "AKIA[0-9A-Z]{16}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Amazon Web Services",
+      "description": "AWS Access Key ID - used across all AWS services including IAM, SES, S3, EC2, Lambda, etc.",
+      "confidence": "high",
+      "references": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html",
+        "https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html"
+      ]
+    },
+    "aws_secret_key": {
+      "name": "AWS Secret Access Key",
+      "pattern": "(?:aws_secret_access_key|aws_secret|secret_key)\\s*[=:]\\s*['\"]?([A-Za-z0-9/+=]{40})['\"]?",
+      "severity": "critical",
+      "category": "cloud",
+      "service": "Amazon Web Services",
+      "description": "AWS Secret Access Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html"
+      ]
+    },
+    "aws_session_token": {
+      "name": "AWS Session Token",
+      "pattern": "aws_session_token\\s*[=:]\\s*['\"]?([A-Za-z0-9/+=]{100,})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Amazon Web Services",
+      "description": "AWS Temporary Session Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html"
+      ]
+    },
+    "google_api_key": {
+      "name": "Google API Key (GCP, AI Studio, Maps, YouTube, Firebase)",
+      "pattern": "AIza[0-9A-Za-z_-]{35}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Google Cloud Platform",
+      "description": "Google API Key - used across GCP, AI Studio, Google Maps, YouTube Data API, and Firebase",
+      "confidence": "high",
+      "references": [
+        "https://cloud.google.com/docs/authentication/api-keys",
+        "https://ai.google.dev/docs/authentication",
+        "https://developers.google.com/maps/documentation/javascript/get-api-key",
+        "https://developers.google.com/youtube/v3/getting-started",
+        "https://firebase.google.com/docs/projects/api-keys"
+      ]
+    },
+    "google_oauth_client_id": {
+      "name": "Google OAuth Client ID",
+      "pattern": "[0-9]+-[0-9A-Za-z_]{32}\\.apps\\.googleusercontent\\.com",
+      "severity": "medium",
+      "category": "authentication",
+      "service": "Google",
+      "description": "Google OAuth Client ID",
+      "confidence": "high",
+      "references": [
+        "https://developers.google.com/identity/protocols/oauth2"
+      ]
+    },
+    "google_oauth_secret": {
+      "name": "Google OAuth Client Secret",
+      "pattern": "GOCSPX-[a-zA-Z0-9_-]{28}",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "Google",
+      "description": "Google OAuth Client Secret",
+      "confidence": "high",
+      "references": [
+        "https://developers.google.com/identity/protocols/oauth2"
+      ]
+    },
+    "google_service_account": {
+      "name": "Google Service Account Key",
+      "pattern": "\\{\\s*\"type\":\\s*\"service_account\"",
+      "severity": "critical",
+      "category": "cloud",
+      "service": "Google Cloud Platform",
+      "description": "Google Service Account JSON Key",
+      "confidence": "high",
+      "references": [
+        "https://cloud.google.com/iam/docs/creating-managing-service-account-keys"
+      ]
+    },
+    "azure_subscription_key": {
+      "name": "Azure Subscription Key",
+      "pattern": "(?:azure_key|azure_secret|ocp-apim-subscription-key)\\s*[=:]\\s*['\"]?([0-9a-f]{32})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Microsoft Azure",
+      "description": "Azure Subscription Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.microsoft.com/en-us/azure/azure-portal/subscription-tenant-administration"
+      ]
+    },
+    "azure_storage_key": {
+      "name": "Azure Storage Account Key",
+      "pattern": "(?:azure_storage|storage_account)_key\\s*[=:]\\s*['\"]?([A-Za-z0-9+/]{88})['\"]?",
+      "severity": "critical",
+      "category": "storage",
+      "service": "Microsoft Azure",
+      "description": "Azure Storage Account Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage"
+      ]
+    },
+    "azure_connection_string": {
+      "name": "Azure Connection String",
+      "pattern": "DefaultEndpointsProtocol=https;AccountName=[^;]+;AccountKey=[A-Za-z0-9+/]{88}",
+      "severity": "critical",
+      "category": "storage",
+      "service": "Microsoft Azure",
+      "description": "Azure Storage Connection String",
+      "confidence": "high",
+      "references": [
+        "https://docs.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string"
+      ]
+    },
+    "github_personal_token": {
+      "name": "GitHub Personal Access Token",
+      "pattern": "ghp_[a-zA-Z0-9]{36}",
+      "severity": "critical",
+      "category": "development",
+      "service": "GitHub",
+      "description": "GitHub Personal Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+      ]
+    },
+    "github_oauth_token": {
+      "name": "GitHub OAuth Token",
+      "pattern": "gho_[a-zA-Z0-9]{36}",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "GitHub",
+      "description": "GitHub OAuth Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.github.com/en/developers/apps/building-oauth-apps"
+      ]
+    },
+    "github_app_token": {
+      "name": "GitHub App Token",
+      "pattern": "ghu_[a-zA-Z0-9]{36}",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "GitHub",
+      "description": "GitHub App Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.github.com/en/developers/apps"
+      ]
+    },
+    "github_refresh_token": {
+      "name": "GitHub Refresh Token",
+      "pattern": "ghr_[a-zA-Z0-9]{36}",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "GitHub",
+      "description": "GitHub Refresh Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.github.com/en/developers/apps/refreshing-user-to-server-access-tokens"
+      ]
+    },
+    "gitlab_personal_token": {
+      "name": "GitLab Personal Access Token",
+      "pattern": "glpat-[a-zA-Z0-9_-]{20}",
+      "severity": "critical",
+      "category": "development",
+      "service": "GitLab",
+      "description": "GitLab Personal Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html"
+      ]
+    },
+    "gitlab_oauth_token": {
+      "name": "GitLab OAuth Token",
+      "pattern": "gloa-[a-zA-Z0-9_-]{64}",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "GitLab",
+      "description": "GitLab OAuth Application Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.gitlab.com/ee/api/oauth2.html"
+      ]
+    },
+    "gitlab_runner_token": {
+      "name": "GitLab Runner Token",
+      "pattern": "GR1348941[a-zA-Z0-9_-]{20}",
+      "severity": "high",
+      "category": "development",
+      "service": "GitLab",
+      "description": "GitLab Runner Registration Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.gitlab.com/ee/ci/runners/"
+      ]
+    },
+    "bitbucket_token": {
+      "name": "Bitbucket Access Token",
+      "pattern": "(?:bitbucket|bb)_?(?:api|access|app)_?(?:token|key|password)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{32})['\"]?",
+      "severity": "high",
+      "category": "development",
+      "service": "Bitbucket",
+      "description": "Bitbucket Access Token with context",
+      "confidence": "high",
+      "references": [
+        "https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/"
+      ]
+    },
+    "mongodb_uri": {
+      "name": "MongoDB Connection URI",
+      "pattern": "mongodb://[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "MongoDB",
+      "description": "MongoDB Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://docs.mongodb.com/manual/reference/connection-string/"
+      ]
+    },
+    "mongodb_srv_uri": {
+      "name": "MongoDB SRV Connection URI",
+      "pattern": "mongodb\\+srv://[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "MongoDB",
+      "description": "MongoDB SRV Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://docs.mongodb.com/manual/reference/connection-string/"
+      ]
+    },
+    "postgresql_uri": {
+      "name": "PostgreSQL Connection URI",
+      "pattern": "postgres://[^\\s\"']+:[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "PostgreSQL",
+      "description": "PostgreSQL Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING"
+      ]
+    },
+    "mysql_uri": {
+      "name": "MySQL Connection URI",
+      "pattern": "mysql://[^\\s\"']+:[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "MySQL",
+      "description": "MySQL Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html"
+      ]
+    },
+    "mariadb_uri": {
+      "name": "MariaDB Connection URI",
+      "pattern": "mariadb://[^\\s\"']+:[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "MariaDB",
+      "description": "MariaDB Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://mariadb.com/kb/en/about-mariadb-connector-nodejs/"
+      ]
+    },
+    "stripe_live_key": {
+      "name": "Stripe Live API Key",
+      "pattern": "sk_live_[0-9a-zA-Z]{24,99}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Stripe",
+      "description": "Stripe Live API Key",
+      "confidence": "high",
+      "references": [
+        "https://stripe.com/docs/keys"
+      ]
+    },
+    "stripe_test_key": {
+      "name": "Stripe Test API Key",
+      "pattern": "sk_test_[0-9a-zA-Z]{24,99}",
+      "severity": "medium",
+      "category": "payment",
+      "service": "Stripe",
+      "description": "Stripe Test API Key",
+      "confidence": "high",
+      "references": [
+        "https://stripe.com/docs/keys"
+      ]
+    },
+    "stripe_restricted_key": {
+      "name": "Stripe Restricted API Key",
+      "pattern": "rk_live_[0-9a-zA-Z]{24,99}",
+      "severity": "high",
+      "category": "payment",
+      "service": "Stripe",
+      "description": "Stripe Restricted API Key",
+      "confidence": "high",
+      "references": [
+        "https://stripe.com/docs/keys"
+      ]
+    },
+    "stripe_publishable_key": {
+      "name": "Stripe Publishable Key",
+      "pattern": "pk_live_[0-9a-zA-Z]{24,99}",
+      "severity": "medium",
+      "category": "payment",
+      "service": "Stripe",
+      "description": "Stripe Publishable Key",
+      "confidence": "high",
+      "references": [
+        "https://stripe.com/docs/keys"
+      ]
+    },
+    "paypal_access_token": {
+      "name": "PayPal Access Token",
+      "pattern": "access_token\\$production\\$[a-zA-Z0-9_-]+$",
+      "severity": "critical",
+      "category": "payment",
+      "service": "PayPal",
+      "description": "PayPal Production Access Token",
+      "confidence": "high",
+      "references": [
+        "https://developer.paypal.com/docs/api/get-access-token/"
+      ]
+    },
+    "square_access_token": {
+      "name": "Square Access Token",
+      "pattern": "sq0atp-[0-9A-Za-z_-]{22}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Square",
+      "description": "Square Access Token",
+      "confidence": "high",
+      "references": [
+        "https://developer.squareup.com/docs/build-basics/access-tokens"
+      ]
+    },
+    "square_oauth_secret": {
+      "name": "Square OAuth Secret",
+      "pattern": "sq0csp-[0-9A-Za-z_-]{43}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Square",
+      "description": "Square OAuth Secret",
+      "confidence": "high",
+      "references": [
+        "https://developer.squareup.com/docs/oauth-api/overview"
+      ]
+    },
+    "braintree_access_token": {
+      "name": "Braintree Access Token",
+      "pattern": "access_token\\$[a-z]{10,12}\\$[a-zA-Z0-9]{16}\\$[a-f0-9]{32}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Braintree",
+      "description": "Braintree Access Token",
+      "confidence": "high",
+      "references": [
+        "https://developer.paypal.com/braintree/docs/guides/authorization/overview"
+      ]
+    },
+    "adyen_api_key": {
+      "name": "Adyen API Key",
+      "pattern": "AQ[A-Za-z0-9_-]{40,70}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Adyen",
+      "description": "Adyen API Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.adyen.com/development-resources/api-credentials"
+      ]
+    },
+    "razorpay_key": {
+      "name": "Razorpay API Key",
+      "pattern": "rzp_(live|test)_[a-zA-Z0-9]{14}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Razorpay",
+      "description": "Razorpay API Key",
+      "confidence": "high",
+      "references": [
+        "https://razorpay.com/docs/api/keys/"
+      ]
+    },
+    "mollie_api_key": {
+      "name": "Mollie API Key",
+      "pattern": "(live|test)_[a-zA-Z0-9]{30}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Mollie",
+      "description": "Mollie API Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.mollie.com/overview/authentication"
+      ]
+    },
+    "checkout_secret_key": {
+      "name": "Checkout.com Secret Key",
+      "pattern": "sk_(test|sbox)_[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Checkout.com",
+      "description": "Checkout.com Secret Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.checkout.com/docs/authentication"
+      ]
+    },
+    "plaid_secret": {
+      "name": "Plaid Secret Key",
+      "pattern": "(?:plaid)_?(?:secret|client_secret|api)_?(?:key)?\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "critical",
+      "category": "payment",
+      "service": "Plaid",
+      "description": "Plaid Secret Key with context",
+      "confidence": "high",
+      "references": [
+        "https://plaid.com/docs/api/tokens/"
+      ]
+    },
+    "twilio_api_key": {
+      "name": "Twilio API Key",
+      "pattern": "SK[a-f0-9]{32}",
+      "severity": "high",
+      "category": "communication",
+      "service": "Twilio",
+      "description": "Twilio API Key",
+      "confidence": "high",
+      "references": [
+        "https://www.twilio.com/docs/usage/api"
+      ]
+    },
+    "twilio_account_sid": {
+      "name": "Twilio Account SID",
+      "pattern": "AC[a-f0-9]{32}",
+      "severity": "medium",
+      "category": "communication",
+      "service": "Twilio",
+      "description": "Twilio Account SID",
+      "confidence": "high",
+      "references": [
+        "https://www.twilio.com/docs/usage/api"
+      ]
+    },
+    "sendgrid_api_key": {
+      "name": "SendGrid API Key",
+      "pattern": "SG\\.[a-zA-Z0-9_-]{22}\\.[a-zA-Z0-9_-]{43}",
+      "severity": "high",
+      "category": "email",
+      "service": "SendGrid",
+      "description": "SendGrid API Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication"
+      ]
+    },
+    "postmark_token": {
+      "name": "Postmark Server Token",
+      "pattern": "(?:postmark|pm)_?(?:server|api)_?(?:token|key)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "email",
+      "service": "Postmark",
+      "description": "Postmark Server API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://postmarkapp.com/developer/api/overview"
+      ]
+    },
+    "mailchimp_api_key": {
+      "name": "Mailchimp API Key",
+      "pattern": "(?:mailchimp|mc)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{32}-us[0-9]{1,2})['\"]?",
+      "severity": "high",
+      "category": "marketing",
+      "service": "Mailchimp",
+      "description": "Mailchimp API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://mailchimp.com/developer/marketing/guides/quick-start/"
+      ]
+    },
+    "mailjet_api_key": {
+      "name": "Mailjet API Key",
+      "pattern": "(?:mailjet|mj)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "email",
+      "service": "Mailjet",
+      "description": "Mailjet API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://dev.mailjet.com/email/guides/getting-started/"
+      ]
+    },
+    "jwt_token": {
+      "name": "JSON Web Token",
+      "pattern": "(?:jwt|id_token|access_token|auth_token|token)\\s*[=:]\\s*['\"]?(eyJ[a-zA-Z0-9_-]+\\.eyJ[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+)['\"]?",
+      "severity": "medium",
+      "category": "authentication",
+      "service": "JWT",
+      "description": "JSON Web Token with context",
+      "confidence": "high",
+      "references": [
+        "https://jwt.io/"
+      ]
+    },
+    "bearer_token": {
+      "name": "Bearer Token",
+      "pattern": "(?:authorization|auth)\\s*[=:]\\s*['\"]?(Bearer\\s+[a-zA-Z0-9_-]{20,})['\"]?",
+      "severity": "medium",
+      "category": "authentication",
+      "service": "OAuth 2.0",
+      "description": "Bearer Authentication Token with context and minimum length",
+      "confidence": "high",
+      "references": [
+        "https://tools.ietf.org/html/rfc6750"
+      ]
+    },
+    "slack_bot_token": {
+      "name": "Slack Bot Token",
+      "pattern": "xoxb-[a-zA-Z0-9-]+",
+      "severity": "high",
+      "category": "communication",
+      "service": "Slack",
+      "description": "Slack Bot Token",
+      "confidence": "high",
+      "references": [
+        "https://api.slack.com/authentication/token-types"
+      ]
+    },
+    "slack_webhook": {
+      "name": "Slack Webhook URL",
+      "pattern": "https://hooks\\.slack\\.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
+      "severity": "high",
+      "category": "communication",
+      "service": "Slack",
+      "description": "Slack Incoming Webhook URL",
+      "confidence": "high",
+      "references": [
+        "https://api.slack.com/messaging/webhooks"
+      ]
+    },
+    "slack_user_token": {
+      "name": "Slack User Token",
+      "pattern": "xoxp-[a-zA-Z0-9-]+",
+      "severity": "critical",
+      "category": "communication",
+      "service": "Slack",
+      "description": "Slack User OAuth Token",
+      "confidence": "high",
+      "references": [
+        "https://api.slack.com/authentication/token-types"
+      ]
+    },
+    "discord_bot_token": {
+      "name": "Discord Bot Token",
+      "pattern": "[MN][A-Za-z\\d]{23}\\.[\\w-]{6}\\.[\\w-]{27}",
+      "severity": "high",
+      "category": "communication",
+      "service": "Discord",
+      "description": "Discord Bot Token",
+      "confidence": "high",
+      "references": [
+        "https://discord.com/developers/docs/topics/oauth2"
+      ]
+    },
+    "discord_webhook": {
+      "name": "Discord Webhook URL",
+      "pattern": "https://discord\\.com/api/webhooks/[0-9]{18}/[a-zA-Z0-9_-]{68}",
+      "severity": "medium",
+      "category": "communication",
+      "service": "Discord",
+      "description": "Discord Webhook URL",
+      "confidence": "high",
+      "references": [
+        "https://discord.com/developers/docs/resources/webhook"
+      ]
+    },
+    "telegram_bot_token": {
+      "name": "Telegram Bot Token",
+      "pattern": "(?:telegram|tg)_?(?:bot|api)_?(?:token|key)\\s*[=:]\\s*['\"]?([0-9]{8,10}:[a-zA-Z0-9_-]{35})['\"]?",
+      "severity": "high",
+      "category": "communication",
+      "service": "Telegram",
+      "description": "Telegram Bot API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://core.telegram.org/bots/api"
+      ]
+    },
+    "whatsapp_token": {
+      "name": "WhatsApp Business Token",
+      "pattern": "EAA[a-zA-Z0-9]{200,}",
+      "severity": "high",
+      "category": "communication",
+      "service": "WhatsApp Business",
+      "description": "WhatsApp Business API Token",
+      "confidence": "medium",
+      "references": [
+        "https://developers.facebook.com/docs/whatsapp"
+      ]
+    },
+    "mailgun_api_key": {
+      "name": "Mailgun API Key",
+      "pattern": "key-[a-zA-Z0-9]{32}",
+      "severity": "high",
+      "category": "email",
+      "service": "Mailgun",
+      "description": "Mailgun API Key",
+      "confidence": "high",
+      "references": [
+        "https://documentation.mailgun.com/en/latest/api_reference.html"
+      ]
+    },
+    "npm_access_token": {
+      "name": "NPM Access Token",
+      "pattern": "npm_[a-zA-Z0-9_-]{36}",
+      "severity": "high",
+      "category": "package",
+      "service": "NPM",
+      "description": "NPM Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.npmjs.com/creating-and-viewing-access-tokens"
+      ]
+    },
+    "pypi_token": {
+      "name": "PyPI Upload Token",
+      "pattern": "pypi-AgEIcHlwaS5vcmc[a-zA-Z0-9_-]{50,200}",
+      "severity": "high",
+      "category": "package",
+      "service": "PyPI",
+      "description": "Python Package Index Upload Token",
+      "confidence": "high",
+      "references": [
+        "https://pypi.org/help/#apitoken"
+      ]
+    },
+    "rubygems_api_key": {
+      "name": "RubyGems API Key",
+      "pattern": "rubygems_[a-f0-9]{48}",
+      "severity": "high",
+      "category": "package",
+      "service": "RubyGems",
+      "description": "RubyGems API Key",
+      "confidence": "high",
+      "references": [
+        "https://guides.rubygems.org/rubygems-org-api/"
+      ]
+    },
+    "nuget_api_key": {
+      "name": "NuGet API Key",
+      "pattern": "oy2[a-z0-9]{43}",
+      "severity": "high",
+      "category": "package",
+      "service": "NuGet",
+      "description": "NuGet Package Manager API Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.microsoft.com/en-us/nuget/nuget-org/publish-a-package"
+      ]
+    },
+    "docker_hub_token": {
+      "name": "Docker Hub Personal Access Token",
+      "pattern": "dckr_pat_[a-zA-Z0-9_-]{95}",
+      "severity": "high",
+      "category": "container",
+      "service": "Docker Hub",
+      "description": "Docker Hub Personal Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.docker.com/docker-hub/access-tokens/"
+      ]
+    },
+    "private_key": {
+      "name": "Private Key Certificate",
+      "pattern": "-----BEGIN\\s+(RSA\\s+)?PRIVATE\\s+KEY-----",
+      "severity": "critical",
+      "category": "security",
+      "service": "SSL/TLS",
+      "description": "Private Key Certificate",
+      "confidence": "high",
+      "references": [
+        "https://tools.ietf.org/html/rfc8017"
+      ]
+    },
+    "ssh_private_key": {
+      "name": "SSH Private Key",
+      "pattern": "-----BEGIN\\s+OPENSSH\\s+PRIVATE\\s+KEY-----",
+      "severity": "critical",
+      "category": "security",
+      "service": "SSH",
+      "description": "SSH Private Key",
+      "confidence": "high",
+      "references": [
+        "https://tools.ietf.org/html/rfc4253"
+      ]
+    },
+    "ssh_rsa_key": {
+      "name": "SSH RSA Public Key",
+      "pattern": "ssh-rsa\\s+AAAA[0-9A-Za-z+/]+[=]{0,3}",
+      "severity": "medium",
+      "category": "security",
+      "service": "SSH",
+      "description": "SSH RSA Public Key",
+      "confidence": "high",
+      "references": [
+        "https://tools.ietf.org/html/rfc4253"
+      ]
+    },
+    "ssh_ed25519_key": {
+      "name": "SSH ED25519 Public Key",
+      "pattern": "ssh-ed25519\\s+AAAA[0-9A-Za-z+/]+[=]{0,3}",
+      "severity": "medium",
+      "category": "security",
+      "service": "SSH",
+      "description": "SSH ED25519 Public Key",
+      "confidence": "high",
+      "references": [
+        "https://ed25519.cr.yp.to/"
+      ]
+    },
+    "pgp_private_key": {
+      "name": "PGP Private Key",
+      "pattern": "-----BEGIN\\s+PGP\\s+PRIVATE\\s+KEY\\s+BLOCK-----",
+      "severity": "critical",
+      "category": "security",
+      "service": "PGP",
+      "description": "PGP Private Key Block",
+      "confidence": "high",
+      "references": [
+        "https://tools.ietf.org/html/rfc4880"
+      ]
+    },
+    "password_in_url": {
+      "name": "Password in URL",
+      "pattern": "://[^\\s:]+:[^\\s@]+@",
+      "severity": "high",
+      "category": "generic",
+      "service": "General",
+      "description": "Password embedded in URL",
+      "confidence": "medium",
+      "references": []
+    },
+    "bitcoin_private_key": {
+      "name": "Bitcoin Private Key",
+      "pattern": "[5KL][1-9A-HJ-NP-Za-km-z]{50}",
+      "severity": "critical",
+      "category": "cryptocurrency",
+      "service": "Bitcoin",
+      "description": "Bitcoin Private Key (WIF format)",
+      "confidence": "high",
+      "references": [
+        "https://en.bitcoin.it/wiki/Wallet_import_format"
+      ]
+    },
+    "ethereum_private_key": {
+      "name": "Ethereum Private Key",
+      "pattern": "(?:eth|ethereum)_?(?:private|priv)_?key\\s*[=:]\\s*['\"]?0x[0-9a-fA-F]{64}['\"]?",
+      "severity": "critical",
+      "category": "cryptocurrency",
+      "service": "Ethereum",
+      "description": "Ethereum Private Key with context",
+      "confidence": "high",
+      "references": [
+        "https://ethereum.org/en/developers/docs/accounts/"
+      ]
+    },
+    "generic_api_key": {
+      "name": "Generic API Key",
+      "pattern": "api[_-]?key\\s*[:=]\\s*['\"]?[a-zA-Z0-9_-]{20,}['\"]?",
+      "severity": "medium",
+      "category": "generic",
+      "service": "General",
+      "description": "Generic API Key pattern",
+      "confidence": "low",
+      "references": []
+    },
+    "generic_secret_key": {
+      "name": "Generic Secret Key",
+      "pattern": "secret[_-]?key\\s*[:=]\\s*['\"]?[a-zA-Z0-9_-]{20,}['\"]?",
+      "severity": "high",
+      "category": "generic",
+      "service": "General",
+      "description": "Generic Secret Key pattern",
+      "confidence": "low",
+      "references": []
+    },
+    "openai_api_key": {
+      "name": "OpenAI API Key",
+      "pattern": "sk-[a-zA-Z0-9]{48}",
+      "severity": "critical",
+      "category": "ai",
+      "service": "OpenAI",
+      "description": "OpenAI API Key",
+      "confidence": "high",
+      "references": [
+        "https://platform.openai.com/docs/api-reference/authentication"
+      ]
+    },
+    "openai_org_key": {
+      "name": "OpenAI Organization Key",
+      "pattern": "org-[a-zA-Z0-9]{24}",
+      "severity": "high",
+      "category": "ai",
+      "service": "OpenAI",
+      "description": "OpenAI Organization ID",
+      "confidence": "high",
+      "references": [
+        "https://platform.openai.com/docs/api-reference/organization"
+      ]
+    },
+    "anthropic_api_key": {
+      "name": "Anthropic Claude API Key",
+      "pattern": "sk-ant-api03-[a-zA-Z0-9_-]{95}",
+      "severity": "critical",
+      "category": "ai",
+      "service": "Anthropic",
+      "description": "Anthropic Claude API Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.anthropic.com/claude/reference/getting-started-with-the-api"
+      ]
+    },
+    "huggingface_token": {
+      "name": "Hugging Face Token",
+      "pattern": "hf_[a-zA-Z0-9]{34}",
+      "severity": "high",
+      "category": "ai",
+      "service": "Hugging Face",
+      "description": "Hugging Face Access Token",
+      "confidence": "high",
+      "references": [
+        "https://huggingface.co/docs/hub/security-tokens"
+      ]
+    },
+    "cohere_api_key": {
+      "name": "Cohere API Key",
+      "pattern": "(?:cohere)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "Cohere",
+      "description": "Cohere API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.cohere.com/docs/authentication"
+      ]
+    },
+    "replicate_api_key": {
+      "name": "Replicate API Key",
+      "pattern": "r8_[a-zA-Z0-9]{32}",
+      "severity": "high",
+      "category": "ai",
+      "service": "Replicate",
+      "description": "Replicate API Key",
+      "confidence": "high",
+      "references": [
+        "https://replicate.com/docs/reference/http"
+      ]
+    },
+    "stability_api_key": {
+      "name": "Stability AI API Key",
+      "pattern": "sk-[a-zA-Z0-9]{32}",
+      "severity": "high",
+      "category": "ai",
+      "service": "Stability AI",
+      "description": "Stability AI API Key",
+      "confidence": "medium",
+      "references": [
+        "https://platform.stability.ai/docs/api-reference/authentication"
+      ]
+    },
+    "elevenlabs_api_key": {
+      "name": "ElevenLabs API Key",
+      "pattern": "(?:elevenlabs|eleven)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "ElevenLabs",
+      "description": "ElevenLabs Voice Synthesis API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.elevenlabs.io/docs/authentication"
+      ]
+    },
+    "assemblyai_api_key": {
+      "name": "AssemblyAI API Key",
+      "pattern": "(?:assemblyai|assembly)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "AssemblyAI",
+      "description": "AssemblyAI Speech-to-Text API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://www.assemblyai.com/docs/authentication"
+      ]
+    },
+    "deepgram_api_key": {
+      "name": "Deepgram API Key",
+      "pattern": "(?:deepgram)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "Deepgram",
+      "description": "Deepgram Speech Recognition API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developers.deepgram.com/docs/authentication"
+      ]
+    },
+    "pinecone_api_key": {
+      "name": "Pinecone API Key",
+      "pattern": "(?:pinecone)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "Pinecone",
+      "description": "Pinecone Vector Database API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.pinecone.io/docs/authentication"
+      ]
+    },
+    "weaviate_api_key": {
+      "name": "Weaviate API Key",
+      "pattern": "(?:weaviate)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "Weaviate",
+      "description": "Weaviate Vector Database API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://weaviate.io/developers/weaviate/authentication"
+      ]
+    },
+    "langchain_api_key": {
+      "name": "LangSmith API Key",
+      "pattern": "lsv2_[a-zA-Z0-9_-]{52}",
+      "severity": "high",
+      "category": "ai",
+      "service": "LangChain",
+      "description": "LangSmith API Key for LangChain monitoring",
+      "confidence": "high",
+      "references": [
+        "https://docs.smith.langchain.com/docs/authentication"
+      ]
+    },
+    "perplexity_api_key": {
+      "name": "Perplexity API Key",
+      "pattern": "pplx-[a-zA-Z0-9]{64}",
+      "severity": "high",
+      "category": "ai",
+      "service": "Perplexity",
+      "description": "Perplexity AI API Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.perplexity.ai/docs/getting-started"
+      ]
+    },
+    "groq_api_key": {
+      "name": "Groq API Key",
+      "pattern": "gsk_[a-zA-Z0-9]{52}",
+      "severity": "high",
+      "category": "ai",
+      "service": "Groq",
+      "description": "Groq API Key",
+      "confidence": "high",
+      "references": [
+        "https://console.groq.com/docs/quickstart"
+      ]
+    },
+    "together_ai_key": {
+      "name": "Together AI API Key",
+      "pattern": "(?:together)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "Together AI",
+      "description": "Together AI API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.together.ai/docs/authentication"
+      ]
+    },
+    "mistral_api_key": {
+      "name": "Mistral AI API Key",
+      "pattern": "(?:mistral)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "ai",
+      "service": "Mistral AI",
+      "description": "Mistral AI API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.mistral.ai/docs/api"
+      ]
+    },
+    "digitalocean_token": {
+      "name": "DigitalOcean Personal Access Token",
+      "pattern": "dop_v1_[a-f0-9]{64}",
+      "severity": "critical",
+      "category": "cloud",
+      "service": "DigitalOcean",
+      "description": "DigitalOcean Personal Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.digitalocean.com/reference/api/create-personal-access-token"
+      ]
+    },
+    "digitalocean_spaces_key": {
+      "name": "DigitalOcean Spaces Access Key",
+      "pattern": "DO00[a-zA-Z0-9]{28}",
+      "severity": "high",
+      "category": "storage",
+      "service": "DigitalOcean",
+      "description": "DigitalOcean Spaces Access Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.digitalocean.com/products/spaces/how-to/manage-access-keys"
+      ]
+    },
+    "vercel_token": {
+      "name": "Vercel API Token",
+      "pattern": "(?:vercel)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{24})['\"]?",
+      "severity": "critical",
+      "category": "cloud",
+      "service": "Vercel",
+      "description": "Vercel API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://vercel.com/docs/rest-api#creating-an-access-token"
+      ]
+    },
+    "render_api_key": {
+      "name": "Render API Key",
+      "pattern": "rnd_[a-zA-Z0-9]{32}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Render",
+      "description": "Render API Key",
+      "confidence": "high",
+      "references": [
+        "https://render.com/docs/api-v1"
+      ]
+    },
+    "heroku_api_key": {
+      "name": "Heroku API Key",
+      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Heroku",
+      "description": "Heroku API Key",
+      "confidence": "medium",
+      "references": [
+        "https://devcenter.heroku.com/articles/platform-api-quickstart"
+      ]
+    },
+    "netlify_token": {
+      "name": "Netlify API Token",
+      "pattern": "(?:netlify)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{64})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Netlify",
+      "description": "Netlify API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.netlify.com/api/get-started/#authentication"
+      ]
+    },
+    "railway_token": {
+      "name": "Railway API Token",
+      "pattern": "(?:railway)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Railway",
+      "description": "Railway API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.railway.app/reference/api"
+      ]
+    },
+    "fly_io_token": {
+      "name": "Fly.io API Token",
+      "pattern": "fo1_[a-zA-Z0-9]{48}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Fly.io",
+      "description": "Fly.io API Token",
+      "confidence": "high",
+      "references": [
+        "https://fly.io/docs/flyctl/auth-token/"
+      ]
+    },
+    "scaleway_token": {
+      "name": "Scaleway API Token",
+      "pattern": "scw_[a-zA-Z0-9_-]{64}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Scaleway",
+      "description": "Scaleway API Token",
+      "confidence": "high",
+      "references": [
+        "https://www.scaleway.com/en/docs/developers/api/api-keys"
+      ]
+    },
+    "ovh_api_key": {
+      "name": "OVH API Key",
+      "pattern": "(?:ovh)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "OVH",
+      "description": "OVH API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.ovh.com/gb/en/api/first-steps-with-ovh-api/"
+      ]
+    },
+    "linode_token": {
+      "name": "Linode Personal Access Token",
+      "pattern": "(?:linode)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Linode",
+      "description": "Linode Personal Access Token with context",
+      "confidence": "high",
+      "references": [
+        "https://www.linode.com/docs/products/tools/api/get-started/"
+      ]
+    },
+    "vultr_api_key": {
+      "name": "Vultr API Key",
+      "pattern": "[A-Z0-9]{36}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Vultr",
+      "description": "Vultr API Key",
+      "confidence": "medium",
+      "references": [
+        "https://www.vultr.com/api/#start"
+      ]
+    },
+    "upcloud_token": {
+      "name": "UpCloud API Token",
+      "pattern": "(?:upcloud)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "UpCloud",
+      "description": "UpCloud API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://upcloud.com/api/docs/"
+      ]
+    },
+    "cloudflare_token": {
+      "name": "Cloudflare API Token",
+      "pattern": "(?:cloudflare|cf)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{40})['\"]?",
+      "severity": "high",
+      "category": "cdn",
+      "service": "Cloudflare",
+      "description": "Cloudflare API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://api.cloudflare.com/#getting-started-requests"
+      ]
+    },
+    "cloudflare_global_key": {
+      "name": "Cloudflare Global API Key",
+      "pattern": "[a-f0-9]{37}",
+      "severity": "critical",
+      "category": "cdn",
+      "service": "Cloudflare",
+      "description": "Cloudflare Global API Key",
+      "confidence": "high",
+      "references": [
+        "https://support.cloudflare.com/hc/en-us/articles/200167836-Managing-API-Tokens-and-Keys"
+      ]
+    },
+    "fastly_token": {
+      "name": "Fastly API Token",
+      "pattern": "(?:fastly)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{32})['\"]?",
+      "severity": "high",
+      "category": "cdn",
+      "service": "Fastly",
+      "description": "Fastly API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.fastly.com/reference/api/"
+      ]
+    },
+    "akamai_token": {
+      "name": "Akamai API Token",
+      "pattern": "akab-[a-zA-Z0-9_-]{32}",
+      "severity": "high",
+      "category": "cdn",
+      "service": "Akamai",
+      "description": "Akamai API Token",
+      "confidence": "medium",
+      "references": [
+        "https://developer.akamai.com/api/getting-started"
+      ]
+    },
+    "ibm_cloud_token": {
+      "name": "IBM Cloud API Token",
+      "pattern": "iam-[a-zA-Z0-9_-]{28}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "IBM Cloud",
+      "description": "IBM Cloud IAM Token",
+      "confidence": "medium",
+      "references": [
+        "https://cloud.ibm.com/docs/account"
+      ]
+    },
+    "oracle_cloud_token": {
+      "name": "Oracle Cloud API Token",
+      "pattern": "(?:oracle)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Oracle Cloud",
+      "description": "Oracle Cloud API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.oracle.com/en/cloud/get-started/subscriptions-cloud-account.html"
+      ]
+    },
+    "alibaba_cloud_token": {
+      "name": "Alibaba Cloud Access Key",
+      "pattern": "LTAI[a-zA-Z0-9]{16}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Alibaba Cloud",
+      "description": "Alibaba Cloud Access Key ID",
+      "confidence": "high",
+      "references": [
+        "https://www.alibabacloud.com/help/doc-detail/53045.htm"
+      ]
+    },
+    "tencent_cloud_token": {
+      "name": "Tencent Cloud Secret ID",
+      "pattern": "AKID[a-zA-Z0-9]{16}",
+      "severity": "high",
+      "category": "cloud",
+      "service": "Tencent Cloud",
+      "description": "Tencent Cloud Secret ID",
+      "confidence": "high",
+      "references": [
+        "https://cloud.tencent.com/document/product/598/32664"
+      ]
+    },
+    "redis_uri": {
+      "name": "Redis Connection URI",
+      "pattern": "redis://[^\\s\"']+:[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "Redis",
+      "description": "Redis Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://redis.io/docs/connect/connections/"
+      ]
+    },
+    "elasticsearch_uri": {
+      "name": "Elasticsearch Connection URI",
+      "pattern": "https?://[^\\s\"']+:[^\\s\"']+@[\\w.-]+:9200",
+      "severity": "high",
+      "category": "database",
+      "service": "Elasticsearch",
+      "description": "Elasticsearch Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api.html"
+      ]
+    },
+    "cassandra_uri": {
+      "name": "Cassandra Connection URI",
+      "pattern": "cassandra://[^\\s\"']+:[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "Apache Cassandra",
+      "description": "Cassandra Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://cassandra.apache.org/doc/latest/cassandra/getting-started/drivers.html"
+      ]
+    },
+    "dynamodb_uri": {
+      "name": "DynamoDB Connection URI",
+      "pattern": "dynamodb://[^\\s\"']+:[^\\s\"']+@",
+      "severity": "high",
+      "category": "database",
+      "service": "Amazon DynamoDB",
+      "description": "DynamoDB Connection URI with credentials",
+      "confidence": "high",
+      "references": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Drivers.html"
+      ]
+    },
+    "firebase_uri": {
+      "name": "Firebase Database URI",
+      "pattern": "https://[\\w.-]+firebaseio\\.com",
+      "severity": "medium",
+      "category": "database",
+      "service": "Firebase",
+      "description": "Firebase Realtime Database URI",
+      "confidence": "medium",
+      "references": [
+        "https://firebase.google.com/docs/database/security"
+      ]
+    },
+    "supabase_uri": {
+      "name": "Supabase Connection URI",
+      "pattern": "postgresql://[^\\s\"']+:[^\\s\"']+@[\\w.-]+\\.supabase\\.co",
+      "severity": "high",
+      "category": "database",
+      "service": "Supabase",
+      "description": "Supabase PostgreSQL Connection URI",
+      "confidence": "high",
+      "references": [
+        "https://supabase.com/docs/guides/database"
+      ]
+    },
+    "supabase_anon_key": {
+      "name": "Supabase Anonymous Key",
+      "pattern": "eyJ[a-zA-Z0-9_-]*\\.eyJ[a-zA-Z0-9_-]*supabase[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]*",
+      "severity": "medium",
+      "category": "database",
+      "service": "Supabase",
+      "description": "Supabase Anonymous/Public Key",
+      "confidence": "medium",
+      "references": [
+        "https://supabase.com/docs/guides/api/api-keys"
+      ]
+    },
+    "planetscale_uri": {
+      "name": "PlanetScale Connection URI",
+      "pattern": "mysql://[^\\s\"']+:[^\\s\"']+@[\\w.-]+\\.planetscale\\.com",
+      "severity": "high",
+      "category": "database",
+      "service": "PlanetScale",
+      "description": "PlanetScale MySQL Connection URI",
+      "confidence": "high",
+      "references": [
+        "https://planetscale.com/docs/concepts/connection-strings"
+      ]
+    },
+    "neon_uri": {
+      "name": "Neon Connection URI",
+      "pattern": "postgresql://[^\\s\"']+:[^\\s\"']+@[\\w.-]+\\.neon\\.tech",
+      "severity": "high",
+      "category": "database",
+      "service": "Neon",
+      "description": "Neon PostgreSQL Connection URI",
+      "confidence": "high",
+      "references": [
+        "https://neon.tech/docs/connect/connection-parameters"
+      ]
+    },
+    "cockroachdb_uri": {
+      "name": "CockroachDB Connection URI",
+      "pattern": "postgresql://[^\\s\"']+:[^\\s\"']+@[\\w.-]+\\.cockroachlabs\\.cloud",
+      "severity": "high",
+      "category": "database",
+      "service": "CockroachDB",
+      "description": "CockroachDB Connection URI",
+      "confidence": "high",
+      "references": [
+        "https://www.cockroachlabs.com/docs/stable/connection-parameters.html"
+      ]
+    },
+    "turso_uri": {
+      "name": "Turso Connection URI",
+      "pattern": "libsql://[^\\s\"']+@[\\w.-]+\\.turso\\.io",
+      "severity": "high",
+      "category": "database",
+      "service": "Turso",
+      "description": "Turso SQLite Connection URI",
+      "confidence": "high",
+      "references": [
+        "https://turso.tech/docs/reference/connection-urls"
+      ]
+    },
+    "airtable_token": {
+      "name": "Airtable Personal Access Token",
+      "pattern": "pat[a-zA-Z0-9]{17}",
+      "severity": "high",
+      "category": "database",
+      "service": "Airtable",
+      "description": "Airtable Personal Access Token",
+      "confidence": "high",
+      "references": [
+        "https://airtable.com/developers/web/api/introduction"
+      ]
+    },
+    "notion_token": {
+      "name": "Notion Integration Token",
+      "pattern": "secret_[a-zA-Z0-9_-]{43}",
+      "severity": "high",
+      "category": "database",
+      "service": "Notion",
+      "description": "Notion Integration Token",
+      "confidence": "high",
+      "references": [
+        "https://developers.notion.com/docs/create-a-notion-integration"
+      ]
+    },
+    "fauna_token": {
+      "name": "FaunaDB Server Key",
+      "pattern": "fn[a-zA-Z0-9]{24}",
+      "severity": "high",
+      "category": "database",
+      "service": "FaunaDB",
+      "description": "FaunaDB Server Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.fauna.com/fauna/current/security/keys"
+      ]
+    },
+    "influxdb_token": {
+      "name": "InfluxDB Token",
+      "pattern": "(?:influxdb|influx)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{88})['\"]?",
+      "severity": "high",
+      "category": "database",
+      "service": "InfluxDB",
+      "description": "InfluxDB Authentication Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.influxdata.com/influxdb/cloud/security/tokens/"
+      ]
+    },
+    "clickhouse_token": {
+      "name": "ClickHouse Token",
+      "pattern": "(?:clickhouse)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "database",
+      "service": "ClickHouse",
+      "description": "ClickHouse Authentication Token with context",
+      "confidence": "high",
+      "references": [
+        "https://clickhouse.com/docs/en/guides/developer/authentication"
+      ]
+    },
+    "datadog_api_key": {
+      "name": "Datadog API Key",
+      "pattern": "(?:datadog|dd)_?(?:api|access)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Datadog",
+      "description": "Datadog API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.datadoghq.com/account_management/api-app-keys/"
+      ]
+    },
+    "datadog_app_key": {
+      "name": "Datadog Application Key",
+      "pattern": "(?:datadog|dd)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Datadog",
+      "description": "Datadog Application Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.datadoghq.com/account_management/api-app-keys/"
+      ]
+    },
+    "newrelic_api_key": {
+      "name": "New Relic API Key",
+      "pattern": "NRAK-[A-Z0-9]{27}",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "New Relic",
+      "description": "New Relic API Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/"
+      ]
+    },
+    "sentry_dsn": {
+      "name": "Sentry DSN",
+      "pattern": "https://[a-f0-9]{32}@[a-z0-9.-]+\\.ingest\\.sentry\\.io/[0-9]+",
+      "severity": "medium",
+      "category": "monitoring",
+      "service": "Sentry",
+      "description": "Sentry Data Source Name (DSN)",
+      "confidence": "high",
+      "references": [
+        "https://docs.sentry.io/product/sentry-basics/dsn-explainer/"
+      ]
+    },
+    "sentry_token": {
+      "name": "Sentry Auth Token",
+      "pattern": "(?:sentry)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Sentry",
+      "description": "Sentry Authentication Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.sentry.io/api/auth/"
+      ]
+    },
+    "bugsnag_api_key": {
+      "name": "Bugsnag API Key",
+      "pattern": "(?:bugsnag|bs)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Bugsnag",
+      "description": "Bugsnag API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.bugsnag.com/api/"
+      ]
+    },
+    "loggly_token": {
+      "name": "Loggly Customer Token",
+      "pattern": "(?:loggly)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "medium",
+      "category": "monitoring",
+      "service": "Loggly",
+      "description": "Loggly Customer Token with context",
+      "confidence": "high",
+      "references": [
+        "https://documentation.solarwinds.com/en/success_center/loggly/content/admin/customer-tokens.htm"
+      ]
+    },
+    "amplitude_api_key": {
+      "name": "Amplitude API Key",
+      "pattern": "(?:amplitude)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Amplitude",
+      "description": "Amplitude Analytics API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://www.docs.developers.amplitude.com/analytics/apis/authentication/"
+      ]
+    },
+    "mixpanel_token": {
+      "name": "Mixpanel Project Token",
+      "pattern": "(?:mixpanel|mp)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "medium",
+      "category": "monitoring",
+      "service": "Mixpanel",
+      "description": "Mixpanel Project Token with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.mixpanel.com/docs/project-token"
+      ]
+    },
+    "segment_write_key": {
+      "name": "Segment Write Key",
+      "pattern": "(?:segment)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "medium",
+      "category": "monitoring",
+      "service": "Segment",
+      "description": "Segment Write Key with context",
+      "confidence": "high",
+      "references": [
+        "https://segment.com/docs/connections/find-writekey/"
+      ]
+    },
+    "grafana_api_key": {
+      "name": "Grafana API Key",
+      "pattern": "eyJ[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Grafana",
+      "description": "Grafana API Key",
+      "confidence": "low",
+      "references": [
+        "https://grafana.com/docs/grafana/latest/administration/api-keys/"
+      ]
+    },
+    "prometheus_token": {
+      "name": "Prometheus Bearer Token",
+      "pattern": "Bearer\\s+[a-zA-Z0-9_-]{40,}",
+      "severity": "medium",
+      "category": "monitoring",
+      "service": "Prometheus",
+      "description": "Prometheus Authentication Token",
+      "confidence": "low",
+      "references": [
+        "https://prometheus.io/docs/guides/basic-auth/"
+      ]
+    },
+    "circleci_token": {
+      "name": "CircleCI Personal Token",
+      "pattern": "(?:circleci|circle)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "development",
+      "service": "CircleCI",
+      "description": "CircleCI Personal API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://circleci.com/docs/managing-api-tokens/"
+      ]
+    },
+    "travis_token": {
+      "name": "Travis CI Access Token",
+      "pattern": "(?:travis|travisci)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{22})['\"]?",
+      "severity": "high",
+      "category": "development",
+      "service": "Travis CI",
+      "description": "Travis CI Access Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.travis-ci.com/user/authentication/"
+      ]
+    },
+    "jenkins_token": {
+      "name": "Jenkins API Token",
+      "pattern": "[a-f0-9]{32,34}",
+      "severity": "high",
+      "category": "development",
+      "service": "Jenkins",
+      "description": "Jenkins API Token",
+      "confidence": "medium",
+      "references": [
+        "https://www.jenkins.io/doc/book/system-administration/authenticating-scripted-clients/"
+      ]
+    },
+    "terraform_cloud_token": {
+      "name": "Terraform Cloud Token",
+      "pattern": "[a-zA-Z0-9]{14}\\.[a-zA-Z0-9]{24}",
+      "severity": "critical",
+      "category": "infrastructure",
+      "service": "Terraform Cloud",
+      "description": "Terraform Cloud API Token",
+      "confidence": "high",
+      "references": [
+        "https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/api-tokens"
+      ]
+    },
+    "ansible_vault_password": {
+      "name": "Ansible Vault Password",
+      "pattern": "\\$ANSIBLE_VAULT;[0-9.]+;AES256",
+      "severity": "critical",
+      "category": "infrastructure",
+      "service": "Ansible",
+      "description": "Ansible Vault Encrypted Data",
+      "confidence": "high",
+      "references": [
+        "https://docs.ansible.com/ansible/latest/vault_guide/index.html"
+      ]
+    },
+    "twitter_api_key": {
+      "name": "Twitter API Key",
+      "pattern": "(?:twitter|tw)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{25})['\"]?",
+      "severity": "high",
+      "category": "social",
+      "service": "Twitter/X",
+      "description": "Twitter/X API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret"
+      ]
+    },
+    "twitter_bearer_token": {
+      "name": "Twitter Bearer Token",
+      "pattern": "AAAAAAAAAAAAAAAAAAAAAA[a-zA-Z0-9%]{80,}",
+      "severity": "high",
+      "category": "social",
+      "service": "Twitter/X",
+      "description": "Twitter/X Bearer Token",
+      "confidence": "high",
+      "references": [
+        "https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens"
+      ]
+    },
+    "facebook_access_token": {
+      "name": "Facebook Access Token",
+      "pattern": "EAA[a-zA-Z0-9]{90,}",
+      "severity": "high",
+      "category": "social",
+      "service": "Facebook",
+      "description": "Facebook Access Token",
+      "confidence": "high",
+      "references": [
+        "https://developers.facebook.com/docs/facebook-login/guides/access-tokens/"
+      ]
+    },
+    "linkedin_client_secret": {
+      "name": "LinkedIn Client Secret",
+      "pattern": "(?:linkedin)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{16})['\"]?",
+      "severity": "high",
+      "category": "social",
+      "service": "LinkedIn",
+      "description": "LinkedIn Client Secret with context",
+      "confidence": "high",
+      "references": [
+        "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authentication"
+      ]
+    },
+    "instagram_access_token": {
+      "name": "Instagram Access Token",
+      "pattern": "IG[a-zA-Z0-9]{24,}",
+      "severity": "high",
+      "category": "social",
+      "service": "Instagram",
+      "description": "Instagram Access Token",
+      "confidence": "medium",
+      "references": [
+        "https://developers.facebook.com/docs/instagram-basic-display-api/overview"
+      ]
+    },
+    "reddit_client_secret": {
+      "name": "Reddit Client Secret",
+      "pattern": "(?:reddit)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{27})['\"]?",
+      "severity": "high",
+      "category": "social",
+      "service": "Reddit",
+      "description": "Reddit App Client Secret with context",
+      "confidence": "high",
+      "references": [
+        "https://www.reddit.com/dev/api/"
+      ]
+    },
+    "zoom_jwt_token": {
+      "name": "Zoom JWT Token",
+      "pattern": "eyJ[a-zA-Z0-9_-]*\\.eyJ[a-zA-Z0-9_-]*zoom[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]*",
+      "severity": "high",
+      "category": "video",
+      "service": "Zoom",
+      "description": "Zoom JWT Token",
+      "confidence": "medium",
+      "references": [
+        "https://developers.zoom.us/docs/internal-apps/jwt/"
+      ]
+    },
+    "vimeo_access_token": {
+      "name": "Vimeo Access Token",
+      "pattern": "(?:vimeo)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "video",
+      "service": "Vimeo",
+      "description": "Vimeo Access Token with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.vimeo.com/api/authentication"
+      ]
+    },
+    "cloudinary_url": {
+      "name": "Cloudinary URL",
+      "pattern": "cloudinary://[0-9]+:[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+",
+      "severity": "high",
+      "category": "storage",
+      "service": "Cloudinary",
+      "description": "Cloudinary Connection URL with Credentials",
+      "confidence": "high",
+      "references": [
+        "https://cloudinary.com/documentation/how_to_integrate_cloudinary"
+      ]
+    },
+    "uploadcare_public_key": {
+      "name": "Uploadcare Public Key",
+      "pattern": "(?:uploadcare)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{20})['\"]?",
+      "severity": "medium",
+      "category": "storage",
+      "service": "Uploadcare",
+      "description": "Uploadcare Public Key with context",
+      "confidence": "high",
+      "references": [
+        "https://uploadcare.com/docs/api_reference/rest/requests_auth/"
+      ]
+    },
+    "imgix_token": {
+      "name": "Imgix API Token",
+      "pattern": "(?:imgix)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "storage",
+      "service": "Imgix",
+      "description": "Imgix API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.imgix.com/apis/management"
+      ]
+    },
+    "algolia_api_key": {
+      "name": "Algolia API Key",
+      "pattern": "(?:algolia)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "search",
+      "service": "Algolia",
+      "description": "Algolia API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://www.algolia.com/doc/guides/security/api-keys/"
+      ]
+    },
+    "elasticsearch_token": {
+      "name": "Elasticsearch API Key",
+      "pattern": "[a-zA-Z0-9_-]{20,}",
+      "severity": "high",
+      "category": "search",
+      "service": "Elasticsearch",
+      "description": "Elasticsearch API Key",
+      "confidence": "low",
+      "references": [
+        "https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-create-api-key.html"
+      ]
+    },
+    "meilisearch_key": {
+      "name": "Meilisearch API Key",
+      "pattern": "(?:meilisearch)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "search",
+      "service": "Meilisearch",
+      "description": "Meilisearch API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://www.meilisearch.com/docs/learn/security/basic_security"
+      ]
+    },
+    "typesense_api_key": {
+      "name": "Typesense API Key",
+      "pattern": "(?:typesense)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "search",
+      "service": "Typesense",
+      "description": "Typesense API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://typesense.org/docs/latest/api/authentication.html"
+      ]
+    },
+    "mapbox_token": {
+      "name": "Mapbox Access Token",
+      "pattern": "pk\\.[a-zA-Z0-9_-]{60,}",
+      "severity": "medium",
+      "category": "maps",
+      "service": "Mapbox",
+      "description": "Mapbox Public Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.mapbox.com/help/getting-started/access-tokens/"
+      ]
+    },
+    "mapbox_secret_token": {
+      "name": "Mapbox Secret Token",
+      "pattern": "sk\\.[a-zA-Z0-9_-]{60,}",
+      "severity": "critical",
+      "category": "maps",
+      "service": "Mapbox",
+      "description": "Mapbox Secret Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.mapbox.com/help/getting-started/access-tokens/"
+      ]
+    },
+    "here_api_key": {
+      "name": "HERE API Key",
+      "pattern": "(?:here)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{40})['\"]?",
+      "severity": "medium",
+      "category": "maps",
+      "service": "HERE Maps",
+      "description": "HERE Maps API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.here.com/documentation/authentication/dev_guide/topics/api-key-credentials.html"
+      ]
+    },
+    "salesforce_token": {
+      "name": "Salesforce Access Token",
+      "pattern": "00D[a-zA-Z0-9]{15}![a-zA-Z0-9.]{100,}",
+      "severity": "critical",
+      "category": "crm",
+      "service": "Salesforce",
+      "description": "Salesforce Access Token",
+      "confidence": "high",
+      "references": [
+        "https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_tokens_scopes.htm"
+      ]
+    },
+    "hubspot_api_key": {
+      "name": "HubSpot API Key",
+      "pattern": "(?:hubspot|hs)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "crm",
+      "service": "HubSpot",
+      "description": "HubSpot API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developers.hubspot.com/docs/api/working-with-oauth"
+      ]
+    },
+    "zendesk_token": {
+      "name": "Zendesk API Token",
+      "pattern": "(?:zendesk|zd)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "crm",
+      "service": "Zendesk",
+      "description": "Zendesk API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://support.zendesk.com/hc/en-us/articles/4408889192858-Managing-access-to-the-Zendesk-API"
+      ]
+    },
+    "intercom_token": {
+      "name": "Intercom Access Token",
+      "pattern": "[a-zA-Z0-9_-]{80,}",
+      "severity": "high",
+      "category": "crm",
+      "service": "Intercom",
+      "description": "Intercom Access Token",
+      "confidence": "medium",
+      "references": [
+        "https://developers.intercom.com/building-apps/docs/authentication-types"
+      ]
+    },
+    "freshdesk_api_key": {
+      "name": "Freshdesk API Key",
+      "pattern": "(?:freshdesk)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{20})['\"]?",
+      "severity": "high",
+      "category": "crm",
+      "service": "Freshdesk",
+      "description": "Freshdesk API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developers.freshdesk.com/api/#authentication"
+      ]
+    },
+    "activecampaign_key": {
+      "name": "ActiveCampaign API Key",
+      "pattern": "(?:activecampaign)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "marketing",
+      "service": "ActiveCampaign",
+      "description": "ActiveCampaign API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://help.activecampaign.com/hc/en-us/articles/207317590-Getting-started-with-the-API"
+      ]
+    },
+    "convertkit_secret": {
+      "name": "ConvertKit API Secret",
+      "pattern": "(?:convertkit|ck)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{24})['\"]?",
+      "severity": "critical",
+      "category": "marketing",
+      "service": "ConvertKit",
+      "description": "ConvertKit API Secret with context",
+      "confidence": "high",
+      "references": [
+        "https://developers.convertkit.com/#authentication"
+      ]
+    },
+    "klaviyo_api_key": {
+      "name": "Klaviyo API Key",
+      "pattern": "pk_[a-f0-9]{64}",
+      "severity": "high",
+      "category": "marketing",
+      "service": "Klaviyo",
+      "description": "Klaviyo Private API Key",
+      "confidence": "high",
+      "references": [
+        "https://developers.klaviyo.com/en/docs/retrieve-api-credentials"
+      ]
+    },
+    "contentful_token": {
+      "name": "Contentful Access Token",
+      "pattern": "CFPAT-[a-zA-Z0-9_-]{43}",
+      "severity": "high",
+      "category": "cms",
+      "service": "Contentful",
+      "description": "Contentful Personal Access Token",
+      "confidence": "high",
+      "references": [
+        "https://www.contentful.com/developers/docs/references/authentication/"
+      ]
+    },
+    "sanity_token": {
+      "name": "Sanity API Token",
+      "pattern": "sk[a-zA-Z0-9]{40}",
+      "severity": "high",
+      "category": "cms",
+      "service": "Sanity",
+      "description": "Sanity API Token",
+      "confidence": "medium",
+      "references": [
+        "https://www.sanity.io/docs/http-auth"
+      ]
+    },
+    "strapi_token": {
+      "name": "Strapi API Token",
+      "pattern": "(?:strapi)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "cms",
+      "service": "Strapi",
+      "description": "Strapi API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/configurations/optional/api-tokens.html"
+      ]
+    },
+    "auth0_client_secret": {
+      "name": "Auth0 Client Secret",
+      "pattern": "(?:auth0)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{64})['\"]?",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "Auth0",
+      "description": "Auth0 Client Secret with context",
+      "confidence": "high",
+      "references": [
+        "https://auth0.com/docs/secure/application-credentials"
+      ]
+    },
+    "okta_token": {
+      "name": "Okta API Token",
+      "pattern": "(?:okta)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{42})['\"]?",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "Okta",
+      "description": "Okta API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.okta.com/docs/guides/create-an-api-token/main/"
+      ]
+    },
+    "clerk_secret_key": {
+      "name": "Clerk Secret Key",
+      "pattern": "sk_(test|live)_[a-zA-Z0-9]{48}",
+      "severity": "critical",
+      "category": "authentication",
+      "service": "Clerk",
+      "description": "Clerk Secret API Key",
+      "confidence": "high",
+      "references": [
+        "https://clerk.com/docs/reference/backend-api"
+      ]
+    },
+    "nexmo_api_key": {
+      "name": "Vonage/Nexmo API Key",
+      "pattern": "(?:nexmo|vonage)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8})['\"]?",
+      "severity": "high",
+      "category": "sms",
+      "service": "Vonage",
+      "description": "Vonage (Nexmo) API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.vonage.com/getting-started/concepts/authentication"
+      ]
+    },
+    "plivo_auth_token": {
+      "name": "Plivo Auth Token",
+      "pattern": "(?:plivo)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{20})['\"]?",
+      "severity": "high",
+      "category": "sms",
+      "service": "Plivo",
+      "description": "Plivo Auth Token with context",
+      "confidence": "high",
+      "references": [
+        "https://www.plivo.com/docs/sms/api/overview/#authentication"
+      ]
+    },
+    "messagebird_key": {
+      "name": "MessageBird API Key",
+      "pattern": "(?:messagebird|mb)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{25})['\"]?",
+      "severity": "high",
+      "category": "sms",
+      "service": "MessageBird",
+      "description": "MessageBird API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developers.messagebird.com/api/#authentication"
+      ]
+    },
+    "africastalking_key": {
+      "name": "Africa's Talking API Key",
+      "pattern": "(?:africastalking)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "sms",
+      "service": "Africa's Talking",
+      "description": "Africa's Talking API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developers.africastalking.com/docs/authentication"
+      ]
+    },
+    "pusher_key": {
+      "name": "Pusher App Key",
+      "pattern": "(?:pusher)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{20})['\"]?",
+      "severity": "medium",
+      "category": "communication",
+      "service": "Pusher",
+      "description": "Pusher App Key with context",
+      "confidence": "high",
+      "references": [
+        "https://pusher.com/docs/channels/library_auth_reference/rest-api/"
+      ]
+    },
+    "ably_api_key": {
+      "name": "Ably API Key",
+      "pattern": "[a-zA-Z0-9_-]{8}\\.[a-zA-Z0-9_-]{80}",
+      "severity": "high",
+      "category": "communication",
+      "service": "Ably",
+      "description": "Ably API Key",
+      "confidence": "high",
+      "references": [
+        "https://ably.com/docs/core-features/authentication"
+      ]
+    },
+    "pubnub_publish_key": {
+      "name": "PubNub Publish Key",
+      "pattern": "pub-c-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}",
+      "severity": "medium",
+      "category": "communication",
+      "service": "PubNub",
+      "description": "PubNub Publish Key",
+      "confidence": "high",
+      "references": [
+        "https://www.pubnub.com/docs/sdks/rest-api/authentication"
+      ]
+    },
+    "stream_api_key": {
+      "name": "Stream API Key",
+      "pattern": "[a-z0-9]{8}",
+      "severity": "high",
+      "category": "communication",
+      "service": "Stream",
+      "description": "Stream Chat/Feed API Key",
+      "confidence": "low",
+      "references": [
+        "https://getstream.io/chat/docs/node/init_and_users/"
+      ]
+    },
+    "agora_app_id": {
+      "name": "Agora App ID",
+      "pattern": "(?:agora)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "medium",
+      "category": "video",
+      "service": "Agora",
+      "description": "Agora App ID with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.agora.io/en/video-calling/reference/manage-agora-account"
+      ]
+    },
+    "jfrog_token": {
+      "name": "JFrog Access Token",
+      "pattern": "eyJ[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+",
+      "severity": "high",
+      "category": "development",
+      "service": "JFrog",
+      "description": "JFrog Artifactory Access Token",
+      "confidence": "low",
+      "references": [
+        "https://jfrog.com/help/r/jfrog-platform-administration-documentation/access-tokens"
+      ]
+    },
+    "sonarcloud_token": {
+      "name": "SonarCloud Token",
+      "pattern": "(?:sonarcloud|sonar)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "development",
+      "service": "SonarCloud",
+      "description": "SonarCloud User Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.sonarcloud.io/advanced-setup/user-accounts/"
+      ]
+    },
+    "codecov_token": {
+      "name": "Codecov Upload Token",
+      "pattern": "(?:codecov)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "medium",
+      "category": "development",
+      "service": "Codecov",
+      "description": "Codecov Upload Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.codecov.com/docs/quick-start"
+      ]
+    },
+    "snyk_token": {
+      "name": "Snyk API Token",
+      "pattern": "(?:snyk)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "security",
+      "service": "Snyk",
+      "description": "Snyk API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.snyk.io/snyk-api-info/authentication-for-api"
+      ]
+    },
+    "aws_s3_bucket": {
+      "name": "AWS S3 Bucket URL",
+      "pattern": "s3://[a-z0-9.-]{3,63}",
+      "severity": "medium",
+      "category": "storage",
+      "service": "Amazon S3",
+      "description": "AWS S3 Bucket URL",
+      "confidence": "high",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html"
+      ]
+    },
+    "aws_cognito_id": {
+      "name": "AWS Cognito Identity Pool ID",
+      "pattern": "[a-z]{2}-[a-z]+-[0-9]:[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}",
+      "severity": "medium",
+      "category": "authentication",
+      "service": "AWS Cognito",
+      "description": "AWS Cognito Identity Pool ID",
+      "confidence": "high",
+      "references": [
+        "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html"
+      ]
+    },
+    "aws_lambda_function": {
+      "name": "AWS Lambda Function URL",
+      "pattern": "https://[a-z0-9]+\\.lambda-url\\.[a-z0-9-]+\\.on\\.aws",
+      "severity": "medium",
+      "category": "cloud",
+      "service": "AWS Lambda",
+      "description": "AWS Lambda Function URL",
+      "confidence": "high",
+      "references": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/lambda-urls.html"
+      ]
+    },
+    "gcp_service_account_email": {
+      "name": "GCP Service Account Email",
+      "pattern": "[a-z0-9-]+@[a-z0-9-]+\\.iam\\.gserviceaccount\\.com",
+      "severity": "medium",
+      "category": "cloud",
+      "service": "Google Cloud Platform",
+      "description": "GCP Service Account Email",
+      "confidence": "high",
+      "references": [
+        "https://cloud.google.com/iam/docs/service-accounts"
+      ]
+    },
+    "azure_devops_pat": {
+      "name": "Azure DevOps Personal Access Token",
+      "pattern": "[a-z0-9]{52}",
+      "severity": "critical",
+      "category": "development",
+      "service": "Azure DevOps",
+      "description": "Azure DevOps Personal Access Token",
+      "confidence": "medium",
+      "references": [
+        "https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate"
+      ]
+    },
+    "azure_cosmosdb_key": {
+      "name": "Azure Cosmos DB Master Key",
+      "pattern": "[a-zA-Z0-9+/]{88}==",
+      "severity": "critical",
+      "category": "database",
+      "service": "Azure Cosmos DB",
+      "description": "Azure Cosmos DB Master Key",
+      "confidence": "medium",
+      "references": [
+        "https://docs.microsoft.com/en-us/azure/cosmos-db/secure-access-to-data"
+      ]
+    },
+    "shopify_access_token": {
+      "name": "Shopify Access Token",
+      "pattern": "shpat_[a-f0-9]{32}",
+      "severity": "critical",
+      "category": "ecommerce",
+      "service": "Shopify",
+      "description": "Shopify Admin API Access Token",
+      "confidence": "high",
+      "references": [
+        "https://shopify.dev/docs/api/admin-rest#authentication"
+      ]
+    },
+    "shopify_custom_app_token": {
+      "name": "Shopify Custom App Token",
+      "pattern": "shpca_[a-f0-9]{32}",
+      "severity": "critical",
+      "category": "ecommerce",
+      "service": "Shopify",
+      "description": "Shopify Custom App Access Token",
+      "confidence": "high",
+      "references": [
+        "https://shopify.dev/docs/apps/auth/admin-app-access-tokens"
+      ]
+    },
+    "shopify_private_app_password": {
+      "name": "Shopify Private App Password",
+      "pattern": "shppa_[a-f0-9]{32}",
+      "severity": "critical",
+      "category": "ecommerce",
+      "service": "Shopify",
+      "description": "Shopify Private App Password",
+      "confidence": "high",
+      "references": [
+        "https://shopify.dev/docs/apps/auth"
+      ]
+    },
+    "woocommerce_consumer_key": {
+      "name": "WooCommerce Consumer Key",
+      "pattern": "ck_[a-f0-9]{40}",
+      "severity": "high",
+      "category": "ecommerce",
+      "service": "WooCommerce",
+      "description": "WooCommerce REST API Consumer Key",
+      "confidence": "high",
+      "references": [
+        "https://woocommerce.github.io/woocommerce-rest-api-docs/#authentication"
+      ]
+    },
+    "woocommerce_consumer_secret": {
+      "name": "WooCommerce Consumer Secret",
+      "pattern": "cs_[a-f0-9]{40}",
+      "severity": "critical",
+      "category": "ecommerce",
+      "service": "WooCommerce",
+      "description": "WooCommerce REST API Consumer Secret",
+      "confidence": "high",
+      "references": [
+        "https://woocommerce.github.io/woocommerce-rest-api-docs/#authentication"
+      ]
+    },
+    "magento_access_token": {
+      "name": "Magento Access Token",
+      "pattern": "[a-z0-9]{32}",
+      "severity": "high",
+      "category": "ecommerce",
+      "service": "Magento",
+      "description": "Magento REST API Access Token",
+      "confidence": "medium",
+      "references": [
+        "https://devdocs.magento.com/guides/v2.4/get-started/authentication/gs-authentication-token.html"
+      ]
+    },
+    "bigcommerce_api_token": {
+      "name": "BigCommerce API Token",
+      "pattern": "(?:bigcommerce|bc)_?(?:api|access)_?(?:token|key)\\s*[=:]\\s*['\"]?([a-z0-9]{40})['\"]?",
+      "severity": "critical",
+      "category": "ecommerce",
+      "service": "BigCommerce",
+      "description": "BigCommerce API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.bigcommerce.com/api-docs/getting-started/authentication"
+      ]
+    },
+    "etsy_api_key": {
+      "name": "Etsy API Key",
+      "pattern": "[a-z0-9]{24}",
+      "severity": "high",
+      "category": "ecommerce",
+      "service": "Etsy",
+      "description": "Etsy API Keystring",
+      "confidence": "medium",
+      "references": [
+        "https://developers.etsy.com/documentation/essentials/authentication"
+      ]
+    },
+    "wordpress_api_key": {
+      "name": "WordPress.com API Key",
+      "pattern": "(?:wordpress|wp)_?(?:api|access)_?(?:token|key)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "cms",
+      "service": "WordPress.com",
+      "description": "WordPress.com API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.wordpress.com/docs/api/"
+      ]
+    },
+    "ghost_admin_api_key": {
+      "name": "Ghost Admin API Key",
+      "pattern": "[a-f0-9]{26}:[a-f0-9]{64}",
+      "severity": "critical",
+      "category": "cms",
+      "service": "Ghost",
+      "description": "Ghost Admin API Key",
+      "confidence": "high",
+      "references": [
+        "https://ghost.org/docs/admin-api/"
+      ]
+    },
+    "ghost_content_api_key": {
+      "name": "Ghost Content API Key",
+      "pattern": "[a-f0-9]{26}",
+      "severity": "medium",
+      "category": "cms",
+      "service": "Ghost",
+      "description": "Ghost Content API Key",
+      "confidence": "high",
+      "references": [
+        "https://ghost.org/docs/content-api/"
+      ]
+    },
+    "drupal_api_key": {
+      "name": "Drupal API Key",
+      "pattern": "(?:drupal)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "cms",
+      "service": "Drupal",
+      "description": "Drupal API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://www.drupal.org/docs/core-modules-and-themes/core-modules/jsonapi-module"
+      ]
+    },
+    "joomla_api_token": {
+      "name": "Joomla API Token",
+      "pattern": "(?:joomla)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "cms",
+      "service": "Joomla",
+      "description": "Joomla API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.joomla.org/J4.x:Joomla_Core_APIs"
+      ]
+    },
+    "backblaze_b2_key": {
+      "name": "Backblaze B2 Application Key",
+      "pattern": "(?:backblaze|b2)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{31})['\"]?",
+      "severity": "critical",
+      "category": "storage",
+      "service": "Backblaze",
+      "description": "Backblaze B2 Application Key with context",
+      "confidence": "high",
+      "references": [
+        "https://www.backblaze.com/b2/docs/application_keys.html"
+      ]
+    },
+    "wasabi_access_key": {
+      "name": "Wasabi Access Key",
+      "pattern": "[A-Z0-9]{20}",
+      "severity": "high",
+      "category": "storage",
+      "service": "Wasabi",
+      "description": "Wasabi Cloud Storage Access Key",
+      "confidence": "medium",
+      "references": [
+        "https://wasabi-support.zendesk.com/hc/en-us/articles/360019677192-Creating-a-Root-Access-Key-and-Secret-Key"
+      ]
+    },
+    "bunnycdn_api_key": {
+      "name": "BunnyCDN API Key",
+      "pattern": "(?:bunnycdn|bunny)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "cdn",
+      "service": "BunnyCDN",
+      "description": "BunnyCDN API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.bunny.net/reference/bunnynet-api-overview"
+      ]
+    },
+    "stackpath_api_key": {
+      "name": "StackPath API Key",
+      "pattern": "(?:stackpath)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "cdn",
+      "service": "StackPath",
+      "description": "StackPath API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://stackpath.dev/reference/authentication"
+      ]
+    },
+    "keycdn_api_key": {
+      "name": "KeyCDN API Key",
+      "pattern": "(?:keycdn)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "cdn",
+      "service": "KeyCDN",
+      "description": "KeyCDN API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://www.keycdn.com/api"
+      ]
+    },
+    "planetscale_token": {
+      "name": "PlanetScale Service Token",
+      "pattern": "pscale_tkn_[a-zA-Z0-9_-]{43}",
+      "severity": "critical",
+      "category": "database",
+      "service": "PlanetScale",
+      "description": "PlanetScale Service Token",
+      "confidence": "high",
+      "references": [
+        "https://planetscale.com/docs/concepts/service-tokens"
+      ]
+    },
+    "planetscale_oauth": {
+      "name": "PlanetScale OAuth Token",
+      "pattern": "pscale_oauth_[a-zA-Z0-9_-]{43}",
+      "severity": "critical",
+      "category": "database",
+      "service": "PlanetScale",
+      "description": "PlanetScale OAuth Token",
+      "confidence": "high",
+      "references": [
+        "https://planetscale.com/docs/concepts/oauth-applications"
+      ]
+    },
+    "railway_project_token": {
+      "name": "Railway Project Token",
+      "pattern": "(?:railway)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "critical",
+      "category": "cloud",
+      "service": "Railway",
+      "description": "Railway Project Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.railway.app/develop/tokens"
+      ]
+    },
+    "doppler_token": {
+      "name": "Doppler Service Token",
+      "pattern": "dp\\.st\\.[a-zA-Z0-9_-]{40,}",
+      "severity": "critical",
+      "category": "security",
+      "service": "Doppler",
+      "description": "Doppler Service Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.doppler.com/docs/service-tokens"
+      ]
+    },
+    "doppler_personal_token": {
+      "name": "Doppler Personal Token",
+      "pattern": "dp\\.pt\\.[a-zA-Z0-9_-]{40,}",
+      "severity": "critical",
+      "category": "security",
+      "service": "Doppler",
+      "description": "Doppler Personal Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.doppler.com/docs/personal-tokens"
+      ]
+    },
+    "vault_token": {
+      "name": "HashiCorp Vault Token",
+      "pattern": "hvs\\.[a-zA-Z0-9_-]{20,}",
+      "severity": "critical",
+      "category": "security",
+      "service": "HashiCorp Vault",
+      "description": "HashiCorp Vault Service Token",
+      "confidence": "high",
+      "references": [
+        "https://developer.hashicorp.com/vault/docs/concepts/tokens"
+      ]
+    },
+    "consul_token": {
+      "name": "HashiCorp Consul Token",
+      "pattern": "(?:consul)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "infrastructure",
+      "service": "HashiCorp Consul",
+      "description": "HashiCorp Consul ACL Token with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.hashicorp.com/consul/docs/security/acl"
+      ]
+    },
+    "nomad_token": {
+      "name": "HashiCorp Nomad Token",
+      "pattern": "(?:nomad)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "infrastructure",
+      "service": "HashiCorp Nomad",
+      "description": "HashiCorp Nomad ACL Token with context",
+      "confidence": "high",
+      "references": [
+        "https://developer.hashicorp.com/nomad/docs/security/acl"
+      ]
+    },
+    "pulumi_access_token": {
+      "name": "Pulumi Access Token",
+      "pattern": "pul-[a-f0-9]{40}",
+      "severity": "critical",
+      "category": "infrastructure",
+      "service": "Pulumi",
+      "description": "Pulumi Access Token",
+      "confidence": "high",
+      "references": [
+        "https://www.pulumi.com/docs/intro/pulumi-service/accounts/#access-tokens"
+      ]
+    },
+    "cloudsmith_api_key": {
+      "name": "Cloudsmith API Key",
+      "pattern": "(?:cloudsmith)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{40})['\"]?",
+      "severity": "high",
+      "category": "package",
+      "service": "Cloudsmith",
+      "description": "Cloudsmith API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://help.cloudsmith.io/docs/api-keys"
+      ]
+    },
+    "artifactory_token": {
+      "name": "JFrog Artifactory API Token",
+      "pattern": "(?:artifactory|jfrog)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{64})['\"]?",
+      "severity": "high",
+      "category": "development",
+      "service": "JFrog Artifactory",
+      "description": "JFrog Artifactory API Token with context",
+      "confidence": "high",
+      "references": [
+        "https://jfrog.com/help/r/jfrog-platform-administration-documentation/access-tokens"
+      ]
+    },
+    "nexus_password": {
+      "name": "Sonatype Nexus Password",
+      "pattern": "nexus_password\\s*[=:]\\s*['\"]?[a-zA-Z0-9@#$%^&*]{8,}['\"]?",
+      "severity": "high",
+      "category": "package",
+      "service": "Sonatype Nexus",
+      "description": "Sonatype Nexus Repository Password",
+      "confidence": "medium",
+      "references": [
+        "https://help.sonatype.com/repomanager3"
+      ]
+    },
+    "launchdarkly_sdk_key": {
+      "name": "LaunchDarkly SDK Key",
+      "pattern": "sdk-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}",
+      "severity": "high",
+      "category": "development",
+      "service": "LaunchDarkly",
+      "description": "LaunchDarkly SDK Key",
+      "confidence": "high",
+      "references": [
+        "https://docs.launchdarkly.com/sdk/concepts/client-side-server-side#keys"
+      ]
+    },
+    "launchdarkly_api_token": {
+      "name": "LaunchDarkly API Token",
+      "pattern": "api-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}",
+      "severity": "critical",
+      "category": "development",
+      "service": "LaunchDarkly",
+      "description": "LaunchDarkly API Access Token",
+      "confidence": "high",
+      "references": [
+        "https://docs.launchdarkly.com/home/account-security/api-access-tokens"
+      ]
+    },
+    "splitio_api_key": {
+      "name": "Split.io API Key",
+      "pattern": "(?:splitio|split)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "development",
+      "service": "Split.io",
+      "description": "Split.io Admin API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://help.split.io/hc/en-us/articles/360019916211-API-keys"
+      ]
+    },
+    "optimizely_api_token": {
+      "name": "Optimizely API Token",
+      "pattern": "[0-9]{1,2}:[a-zA-Z0-9]{32}",
+      "severity": "high",
+      "category": "marketing",
+      "service": "Optimizely",
+      "description": "Optimizely Personal Access Token",
+      "confidence": "medium",
+      "references": [
+        "https://docs.developers.optimizely.com/web-experimentation/reference/authentication"
+      ]
+    },
+    "pagerduty_api_key": {
+      "name": "PagerDuty API Key",
+      "pattern": "(?:pagerduty|pd)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9_-]{20})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "PagerDuty",
+      "description": "PagerDuty API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://support.pagerduty.com/docs/api-access-keys"
+      ]
+    },
+    "opsgenie_api_key": {
+      "name": "Opsgenie API Key",
+      "pattern": "(?:opsgenie)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Opsgenie",
+      "description": "Opsgenie API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://support.atlassian.com/opsgenie/docs/api-key-management/"
+      ]
+    },
+    "victorops_api_key": {
+      "name": "VictorOps API Key",
+      "pattern": "(?:victorops)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "VictorOps",
+      "description": "VictorOps API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://help.victorops.com/knowledge-base/api/"
+      ]
+    },
+    "rollbar_access_token": {
+      "name": "Rollbar Access Token",
+      "pattern": "(?:rollbar)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Rollbar",
+      "description": "Rollbar Post Server Item Access Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.rollbar.com/docs/access-tokens"
+      ]
+    },
+    "raygun_api_key": {
+      "name": "Raygun API Key",
+      "pattern": "(?:raygun)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Raygun",
+      "description": "Raygun API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://raygun.com/documentation/product-guides/crash-reporting/api/"
+      ]
+    },
+    "honeybadger_api_key": {
+      "name": "Honeybadger API Key",
+      "pattern": "(?:honeybadger|hb)_?(?:api|access|app|public)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Honeybadger",
+      "description": "Honeybadger API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.honeybadger.io/api/"
+      ]
+    },
+    "airbrake_api_key": {
+      "name": "Airbrake API Key",
+      "pattern": "(?:airbrake)_?(?:api|access|app)_?(?:key|token|id)\\s*[=:]\\s*['\"]?([a-f0-9]{32})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Airbrake",
+      "description": "Airbrake Project API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://airbrake.io/docs/api/"
+      ]
+    },
+    "appsignal_push_key": {
+      "name": "AppSignal Push API Key",
+      "pattern": "(?:appsignal)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "AppSignal",
+      "description": "AppSignal Push API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.appsignal.com/appsignal/terminology.html#push-api-key"
+      ]
+    },
+    "fullstory_api_key": {
+      "name": "FullStory API Key",
+      "pattern": "[a-zA-Z0-9]{8,}",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "FullStory",
+      "description": "FullStory API Key",
+      "confidence": "low",
+      "references": [
+        "https://developer.fullstory.com/api-basics"
+      ]
+    },
+    "heap_api_key": {
+      "name": "Heap Analytics API Key",
+      "pattern": "[0-9]{10,}",
+      "severity": "medium",
+      "category": "monitoring",
+      "service": "Heap",
+      "description": "Heap Analytics App ID",
+      "confidence": "low",
+      "references": [
+        "https://developers.heap.io/reference/authentication"
+      ]
+    },
+    "hotjar_site_id": {
+      "name": "Hotjar Site ID",
+      "pattern": "[0-9]{6,}",
+      "severity": "low",
+      "category": "monitoring",
+      "service": "Hotjar",
+      "description": "Hotjar Site ID",
+      "confidence": "low",
+      "references": [
+        "https://help.hotjar.com/hc/en-us/articles/115011639927-What-is-a-Hotjar-Site-ID"
+      ]
+    },
+    "recaptcha_secret": {
+      "name": "Google reCAPTCHA Secret Key",
+      "pattern": "6L[a-zA-Z0-9_-]{38}",
+      "severity": "high",
+      "category": "security",
+      "service": "Google reCAPTCHA",
+      "description": "Google reCAPTCHA Secret Key",
+      "confidence": "high",
+      "references": [
+        "https://developers.google.com/recaptcha/docs/verify"
+      ]
+    },
+    "hcaptcha_secret": {
+      "name": "hCaptcha Secret Key",
+      "pattern": "0x[a-fA-F0-9]{40}",
+      "severity": "high",
+      "category": "security",
+      "service": "hCaptcha",
+      "description": "hCaptcha Secret Key",
+      "confidence": "medium",
+      "references": [
+        "https://docs.hcaptcha.com/"
+      ]
+    },
+    "turnstile_secret": {
+      "name": "Cloudflare Turnstile Secret Key",
+      "pattern": "0x[a-fA-F0-9]{40}_[a-zA-Z0-9]{22}",
+      "severity": "high",
+      "category": "security",
+      "service": "Cloudflare Turnstile",
+      "description": "Cloudflare Turnstile Secret Key",
+      "confidence": "high",
+      "references": [
+        "https://developers.cloudflare.com/turnstile/"
+      ]
+    },
+    "lets_encrypt_account_key": {
+      "name": "Let's Encrypt Account Key",
+      "pattern": "-----BEGIN\\s+PRIVATE\\s+KEY-----[\\s\\S]+-----END\\s+PRIVATE\\s+KEY-----",
+      "severity": "critical",
+      "category": "security",
+      "service": "Let's Encrypt",
+      "description": "Let's Encrypt Account Private Key",
+      "confidence": "high",
+      "references": [
+        "https://letsencrypt.org/docs/account-id/"
+      ]
+    },
+    "sumologic_access_key": {
+      "name": "Sumo Logic Access Key",
+      "pattern": "su[a-zA-Z0-9]{12}",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Sumo Logic",
+      "description": "Sumo Logic Access Key",
+      "confidence": "medium",
+      "references": [
+        "https://help.sumologic.com/docs/manage/security/access-keys/"
+      ]
+    },
+    "splunk_token": {
+      "name": "Splunk Authentication Token",
+      "pattern": "(?:splunk)_?(?:api|access|project|push)_?(?:key|token)\\s*[=:]\\s*['\"]?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})['\"]?",
+      "severity": "high",
+      "category": "monitoring",
+      "service": "Splunk",
+      "description": "Splunk Authentication Token with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.splunk.com/Documentation/Splunk/latest/Security/Setupauthenticationwithtokens"
+      ]
+    },
+    "elastic_cloud_id": {
+      "name": "Elastic Cloud ID",
+      "pattern": "[a-zA-Z0-9_-]+:[a-zA-Z0-9+/]{200,}={0,2}",
+      "severity": "medium",
+      "category": "database",
+      "service": "Elastic Cloud",
+      "description": "Elastic Cloud ID",
+      "confidence": "medium",
+      "references": [
+        "https://www.elastic.co/guide/en/cloud/current/ec-cloud-id.html"
+      ]
+    },
+    "elastic_api_key": {
+      "name": "Elastic API Key",
+      "pattern": "[a-zA-Z0-9_-]{20}:[a-zA-Z0-9_-]{100,}",
+      "severity": "critical",
+      "category": "database",
+      "service": "Elasticsearch",
+      "description": "Elastic API Key",
+      "confidence": "high",
+      "references": [
+        "https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-create-api-key.html"
+      ]
+    },
+    "mongodb_atlas_public_key": {
+      "name": "MongoDB Atlas Public Key",
+      "pattern": "[a-z]{8}",
+      "severity": "medium",
+      "category": "database",
+      "service": "MongoDB Atlas",
+      "description": "MongoDB Atlas API Public Key",
+      "confidence": "low",
+      "references": [
+        "https://www.mongodb.com/docs/atlas/configure-api-access/"
+      ]
+    },
+    "redis_cloud_api_key": {
+      "name": "Redis Cloud API Key",
+      "pattern": "(?:redis)_?(?:api|access|client|auth|write)_?(?:key|token|secret)\\s*[=:]\\s*['\"]?([a-zA-Z0-9]{40})['\"]?",
+      "severity": "high",
+      "category": "database",
+      "service": "Redis Cloud",
+      "description": "Redis Cloud API Key with context",
+      "confidence": "high",
+      "references": [
+        "https://docs.redis.com/latest/rc/api/get-started/"
+      ]
+    },
+    "neo4j_password": {
+      "name": "Neo4j Connection Password",
+      "pattern": "neo4j://[^:]+:[^@]+@",
+      "severity": "high",
+      "category": "database",
+      "service": "Neo4j",
+      "description": "Neo4j Connection String with Password",
+      "confidence": "high",
+      "references": [
+        "https://neo4j.com/docs/operations-manual/current/configuration/connectors/"
+      ]
+    }
+  }
+}
