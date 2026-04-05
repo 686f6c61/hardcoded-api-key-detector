@@ -6,7 +6,7 @@
 [![Node Version](https://img.shields.io/node/v/hardcoded-api-key-detector.svg)](https://nodejs.org)
 [![GitHub issues](https://img.shields.io/github/issues/686f6c61/hardcoded-api-key-detector.svg)](https://github.com/686f6c61/hardcoded-api-key-detector/issues)
 
-**[View Documentation & Examples →](https://hardcoded-api-key-detector.onrender.com)**
+**[View Documentation & Examples →](https://hardcoded-api-key-detector.686f6c61.dev)**
 
 A comprehensive and high-performance Node.js security tool designed to detect hardcoded API keys, tokens, and sensitive credentials in your codebase before they reach production. With 245 detection patterns covering major cloud providers, AI platforms, databases, payment services, and development tools, plus advanced features like entropy analysis, baseline filtering, and inline ignore comments, this tool helps prevent accidental credential exposure that could lead to security breaches and financial loss.
 
