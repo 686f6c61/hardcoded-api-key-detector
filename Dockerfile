@@ -1,7 +1,7 @@
 FROM node:22-alpine AS build
 WORKDIR /app/landing
 COPY landing/package*.json ./
-RUN npm ci
+RUN npm install
 COPY landing/ .
 RUN npm run build
 
